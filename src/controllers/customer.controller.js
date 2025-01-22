@@ -4,7 +4,7 @@ import { models } from "../models/init-models.js";
 
 export const getAllCustomers = async(req, res) => {
     try {
-        const customer = await models.Customer.findAll({
+        const customers = await models.Customer.findAll({
             attributes: ["customerid", "territoryid", "storeid"],
             include: {
                 model: models.Store,
@@ -13,7 +13,8 @@ export const getAllCustomers = async(req, res) => {
             }
         })
 
-        res.status(200).json({data: customer})
+        const plainCustomers = customers.map(customer => customer.toJSON());
+        return plainCustomers
     } catch (error) {
         console.error('error al obtener los clientes', error)
         throw new Error('Error al obtener los clientes' )
@@ -22,21 +23,23 @@ export const getAllCustomers = async(req, res) => {
 
 export const getStores = async (req, res) => {
     try {
-        const store = await models.Store.findAll({
+        const stores = await models.Store.findAll({
           attributes: ["businessentityid", "name"],
         });
 
-        res.status(200).json({ data: store });
+
+        const plainStores = stores.map((store) => store.toJSON());
+        return plainStores;
     } catch (error) {
         throw new Error("Error al obtener las tiendas");
     }
 }
 
-export const filterCustomers = async(req, res) => {
+export const filterCustomers = async(data) => {
     try {
-        const { storeName, customerName, territory } = req.body;
+        const { storeName, customerName, territory } = data;
 
-        const filters = {};
+        const filters = {}; //clausula Where
 
         if(storeName) {
             filters["$store.name$"] = { [Op.like]: `%${storeName}%`};
@@ -51,7 +54,7 @@ export const filterCustomers = async(req, res) => {
         }
 
 
-        const customer = await models.Customer.findAll({
+        const customers = await models.Customer.findAll({
             where: filters,
             include: {
                 model: models.Store,
@@ -59,12 +62,8 @@ export const filterCustomers = async(req, res) => {
             }
         });
 
-        res.status(200).json({
-            message: 'Datos encontrados con éxito',
-            status: 200,
-            data: customer
-        })
-
+        const plainCustomers = customers.map((customer) => customer.toJSON());
+        return plainCustomers;
     } catch (error) {
         res.status(500).json({message: 'Error al filtrar', status: 500});
     }

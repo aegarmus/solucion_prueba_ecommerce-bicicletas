@@ -1,0 +1,54 @@
+
+<div class="container">
+    <h1 class="text-center">Listado de Clientes</h1>
+
+    <form id="filterForm" method="POST" action="/filter">
+        <div class="mb-3">
+            <label for="storeName">Nombre de la tienda</label>
+            <select name="storeName" id="storeName">
+                <option value="">Selecciona una tienda</option>
+                {{#each stores}}
+                    <option value="{{name}}">{{name}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="customerName" class="form-label">Nombre cliente</label>
+            <input type="text" class="form-control" id="customerName" name="customerName" placeholder="Nombre del cliente" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="territory" class="form-label">Territorio</label>
+            <input type="text" class="form-control" id="territory" name="territory">
+        </div>
+  
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+
+
+    <!--Tabla resultados -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Cliente</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Territorio</th>
+                <th scope="col">ID Tienda</th>
+                <th scope="col">Nombre Tienda</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each customers}}
+                <tr>
+                    <th scope="row">{{customerid}}</th>
+                    <td>{{name}}</td>
+                    <td>{{territoryid}}</td>
+                    <td>{{storeid}}</td>
+                    <td>{{store.name}}</td>
+                </tr>
+            {{/each}}
+
+        </tbody>
+    </table>
+
+</div>

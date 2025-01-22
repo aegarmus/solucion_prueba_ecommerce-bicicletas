@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-
 import { config } from "../config/env.config.js";
 
 const { secretKey } = config;

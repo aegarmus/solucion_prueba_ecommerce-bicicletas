@@ -6,6 +6,7 @@ import { serverInit } from './services/ServerInit.js';
 
 import authRouter from './routes/auth.routes.js'
 import costumerRouter from './routes/customer.routes.js'
+import viewsRouter from './routes/views.routes.js'
 
 
 const app = express();
@@ -22,6 +23,8 @@ app.engine(
     defaultLayout: "main",
     layoutsDir: path.join(process.cwd(), "src", "views", "layouts"),
     partialsDir: path.join(process.cwd(), "src", "views", "partials"),
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true
   })
 );
 
@@ -30,6 +33,6 @@ app.set("view engine", ".hbs");
 
 app.use('/api/v1', authRouter);
 app.use('/api/v1', costumerRouter);
-
+app.use('', viewsRouter);
 
 serverInit(app)
